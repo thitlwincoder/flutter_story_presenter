@@ -120,6 +120,8 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
     }
     _animationController = AnimationController(
       vsync: this,
+      duration: const Duration(milliseconds: 400),
+      reverseDuration: const Duration(milliseconds: 400),
     );
     currentIndex = widget.initialIndex;
     widget.flutterStoryController?.addListener(_storyControllerListener);
@@ -240,6 +242,8 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
         _totalAudioDuration = v;
         _animationController ??= AnimationController(
           vsync: this,
+          duration: const Duration(milliseconds: 400),
+          reverseDuration: const Duration(milliseconds: 400),
         );
 
         _animationController?.duration = v;
@@ -271,6 +275,8 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
 
     _animationController ??= AnimationController(
       vsync: this,
+      duration: const Duration(milliseconds: 400),
+      reverseDuration: const Duration(milliseconds: 400),
     );
 
     _animationController?.duration =
