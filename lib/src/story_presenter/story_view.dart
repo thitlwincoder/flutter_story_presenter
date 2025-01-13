@@ -395,6 +395,16 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
 
   /// Plays the previous story item.
   void _playPrevious() {
+    if (currentIndex == 0) {
+      _resetAnimation();
+      _startStoryCountdown();
+      if (mounted) {
+        setState(() {});
+      }
+      widget.onPreviousCompleted?.call();
+      return;
+    }
+
     if (_audioPlayer != null) {
       _audioPlayer?.dispose();
       _audioDurationSubscriptionStream?.cancel();
@@ -404,16 +414,6 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
       _currentVideoPlayer?.removeListener(videoListener);
       _currentVideoPlayer?.dispose();
       _currentVideoPlayer = null;
-    }
-
-    if (currentIndex == 0) {
-      _resetAnimation();
-      _startStoryCountdown();
-      if (mounted) {
-        setState(() {});
-      }
-      widget.onPreviousCompleted?.call();
-      return;
     }
 
     _resetAnimation();
