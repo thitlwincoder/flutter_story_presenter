@@ -110,7 +110,9 @@ class _VideoStoryViewState extends State<VideoStoryView> {
           } else ...{
             // Display the video fitted to the screen.
             FittedBox(
-              fit: widget.storyItem.videoConfig?.fit ?? BoxFit.cover,
+              fit: videoPlayerController!.value.size.height >= 1080
+                  ? BoxFit.fitHeight
+                  : BoxFit.fitWidth,
               alignment: Alignment.center,
               child: SizedBox(
                 width: widget.storyItem.videoConfig?.width ??
