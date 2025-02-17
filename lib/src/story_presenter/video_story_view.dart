@@ -85,8 +85,8 @@ class _VideoStoryViewState extends State<VideoStoryView> {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      alignment: (fit == BoxFit.cover) ? Alignment.topCenter : Alignment.center,
-      fit: (fit == BoxFit.cover) ? StackFit.expand : StackFit.loose,
+      fit: StackFit.expand,
+      alignment: Alignment.center,
       children: [
         if (widget.storyItem.videoConfig?.loadingWidget != null) ...{
           widget.storyItem.videoConfig!.loadingWidget!,
@@ -110,10 +110,7 @@ class _VideoStoryViewState extends State<VideoStoryView> {
           } else ...{
             // Display the video fitted to the screen.
             FittedBox(
-              fit: videoPlayerController!.value.size.height >= 1080
-                  ? BoxFit.fitHeight
-                  : BoxFit.fitWidth,
-              alignment: Alignment.center,
+              fit: BoxFit.fitWidth,
               child: SizedBox(
                 width: widget.storyItem.videoConfig?.width ??
                     videoPlayerController!.value.size.width,
@@ -123,7 +120,7 @@ class _VideoStoryViewState extends State<VideoStoryView> {
               ),
             )
           },
-        }
+        },
       ],
     );
   }

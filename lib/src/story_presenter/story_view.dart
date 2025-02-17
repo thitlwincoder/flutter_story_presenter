@@ -429,6 +429,7 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Stack(
+      fit: StackFit.expand,
       children: [
         if (currentItem.thumbnail != null) ...{
           currentItem.thumbnail!,
@@ -473,7 +474,7 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
           ),
         },
         if (currentItem.storyItemType.isVideo) ...{
-          Positioned.fill(
+          Center(
             child: VideoStoryView(
               storyItem: currentItem,
               key: ValueKey('$currentIndex'),
