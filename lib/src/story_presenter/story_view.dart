@@ -474,7 +474,7 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
           ),
         },
         if (currentItem.storyItemType.isVideo) ...{
-          Center(
+          Positioned.fill(
             child: VideoStoryView(
               storyItem: currentItem,
               key: ValueKey('$currentIndex'),
