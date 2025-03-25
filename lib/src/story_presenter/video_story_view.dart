@@ -73,7 +73,7 @@ class _VideoStoryViewState extends State<VideoStoryView> {
 
   @override
   void dispose() {
-    controller?.removeEventsListener(eventListener);
+    // controller?.removeEventsListener(eventListener);
     controller?.dispose();
     super.dispose();
   }
