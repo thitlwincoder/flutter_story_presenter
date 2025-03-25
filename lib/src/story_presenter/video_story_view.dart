@@ -117,6 +117,11 @@ class _VideoStoryViewState extends State<VideoStoryView> {
             child: BetterPlayer(
               controller: controller!,
             ),
+          ),
+          Center(
+            child: Text(
+              '${controller?.videoPlayerController?.value.aspectRatio ?? 0}',
+            ),
           )
           // if (widget.storyItem.videoConfig?.useVideoAspectRatio ?? false) ...{
           //   // Display the video with aspect ratio if specified.
