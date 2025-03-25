@@ -358,8 +358,6 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
 
   /// Plays the next story item.
   void _playNext() async {
-    if (!mounted) return;
-
     if (widget.items.length == 1 &&
         _currentVideoPlayer != null &&
         widget.restartOnCompleted) {
