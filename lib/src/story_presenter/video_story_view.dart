@@ -58,13 +58,13 @@ class _VideoStoryViewState extends State<VideoStoryView> {
       // await videoPlayerController?.initialize();
       widget.onVideoLoad?.call(controller!);
       await controller?.play();
-      await controller?.setLooping(widget.looping ?? false);
-      await controller?.setVolume(storyItem.isMuteByDefault ? 0 : 1);
-      if (controller?.videoPlayerController != null) {
-        controller?.setOverriddenAspectRatio(
-          controller!.videoPlayerController!.value.aspectRatio,
-        );
-      }
+      // await controller?.setLooping(widget.looping ?? false);
+      // await controller?.setVolume(storyItem.isMuteByDefault ? 0 : 1);
+      // if (controller?.videoPlayerController != null) {
+      //   controller?.setOverriddenAspectRatio(
+      //     controller!.videoPlayerController!.value.aspectRatio,
+      //   );
+      // }
     } catch (e) {
       hasError = true;
       debugPrint('$e');
@@ -78,6 +78,16 @@ class _VideoStoryViewState extends State<VideoStoryView> {
   void dispose() {
     controller?.dispose();
     super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant VideoStoryView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (controller?.videoPlayerController != null) {
+      controller?.setOverriddenAspectRatio(
+        controller!.videoPlayerController!.value.aspectRatio,
+      );
+    }
   }
 
   @override
