@@ -72,6 +72,14 @@ class _VideoStoryViewState extends State<VideoStoryView> {
   }
 
   @override
+  void didUpdateWidget(covariant VideoStoryView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.storyItem.url != widget.storyItem.url) {
+      _initialiseVideoPlayer();
+    }
+  }
+
+  @override
   void dispose() {
     controller?.removeEventsListener(eventListener);
     controller?.dispose();
