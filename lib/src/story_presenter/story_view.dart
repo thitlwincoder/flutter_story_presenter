@@ -528,46 +528,46 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
             ),
           ),
         },
-        Align(
-          alignment: storyViewIndicatorConfig.alignment,
-          child: Padding(
-            padding: storyViewIndicatorConfig.margin,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _currentVideoPlayer != null
-                    ? SmoothVideoProgress(
-                        controller: _currentVideoPlayer!,
-                        builder: (context, progress, duration, child) {
-                          return StoryViewIndicator(
-                            currentIndex: currentIndex,
-                            currentItemAnimatedValue: progress.inMilliseconds /
-                                duration.inMilliseconds,
-                            totalItems: widget.items.length,
-                            storyViewIndicatorConfig: storyViewIndicatorConfig,
-                          );
-                        })
-                    : _animationController != null
-                        ? AnimatedBuilder(
-                            animation: _animationController!,
-                            builder: (context, child) => StoryViewIndicator(
-                              currentIndex: currentIndex,
-                              currentItemAnimatedValue: currentItemProgress,
-                              totalItems: widget.items.length,
-                              storyViewIndicatorConfig:
-                                  storyViewIndicatorConfig,
-                            ),
-                          )
-                        : StoryViewIndicator(
-                            currentIndex: currentIndex,
-                            currentItemAnimatedValue: currentItemProgress,
-                            totalItems: widget.items.length,
-                            storyViewIndicatorConfig: storyViewIndicatorConfig,
-                          ),
-              ],
-            ),
-          ),
-        ),
+        // Align(
+        //   alignment: storyViewIndicatorConfig.alignment,
+        //   child: Padding(
+        //     padding: storyViewIndicatorConfig.margin,
+        //     child: Column(
+        //       mainAxisSize: MainAxisSize.min,
+        //       children: [
+        //         _currentVideoPlayer != null
+        //             ? SmoothVideoProgress(
+        //                 controller: _currentVideoPlayer!,
+        //                 builder: (context, progress, duration, child) {
+        //                   return StoryViewIndicator(
+        //                     currentIndex: currentIndex,
+        //                     currentItemAnimatedValue: progress.inMilliseconds /
+        //                         duration.inMilliseconds,
+        //                     totalItems: widget.items.length,
+        //                     storyViewIndicatorConfig: storyViewIndicatorConfig,
+        //                   );
+        //                 })
+        //             : _animationController != null
+        //                 ? AnimatedBuilder(
+        //                     animation: _animationController!,
+        //                     builder: (context, child) => StoryViewIndicator(
+        //                       currentIndex: currentIndex,
+        //                       currentItemAnimatedValue: currentItemProgress,
+        //                       totalItems: widget.items.length,
+        //                       storyViewIndicatorConfig:
+        //                           storyViewIndicatorConfig,
+        //                     ),
+        //                   )
+        //                 : StoryViewIndicator(
+        //                     currentIndex: currentIndex,
+        //                     currentItemAnimatedValue: currentItemProgress,
+        //                     totalItems: widget.items.length,
+        //                     storyViewIndicatorConfig: storyViewIndicatorConfig,
+        //                   ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
         Align(
           alignment: Alignment.centerLeft,
           child: SizedBox(
