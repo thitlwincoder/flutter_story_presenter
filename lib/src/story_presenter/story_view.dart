@@ -4,6 +4,8 @@ import 'dart:developer';
 import 'package:better_player_plus/better_player_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_story_presenter/src/story_presenter/story_custom_view_wrapper.dart';
+import 'package:flutter_story_presenter/src/story_presenter/story_view_indicator.dart';
+import 'package:flutter_story_presenter/src/utils/smooth_video_progress.dart';
 import 'package:just_audio/just_audio.dart';
 import '../models/story_item.dart';
 import '../models/story_view_indicator_config.dart';
@@ -535,46 +537,46 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
             ),
           ),
         },
-        // Align(
-        //   alignment: storyViewIndicatorConfig.alignment,
-        //   child: Padding(
-        //     padding: storyViewIndicatorConfig.margin,
-        //     child: Column(
-        //       mainAxisSize: MainAxisSize.min,
-        //       children: [
-        //         _currentVideoPlayer != null
-        //             ? SmoothVideoProgress(
-        //                 controller: _currentVideoPlayer!,
-        //                 builder: (context, progress, duration, child) {
-        //                   return StoryViewIndicator(
-        //                     currentIndex: currentIndex,
-        //                     currentItemAnimatedValue: progress.inMilliseconds /
-        //                         duration.inMilliseconds,
-        //                     totalItems: widget.items.length,
-        //                     storyViewIndicatorConfig: storyViewIndicatorConfig,
-        //                   );
-        //                 })
-        //             : _animationController != null
-        //                 ? AnimatedBuilder(
-        //                     animation: _animationController!,
-        //                     builder: (context, child) => StoryViewIndicator(
-        //                       currentIndex: currentIndex,
-        //                       currentItemAnimatedValue: currentItemProgress,
-        //                       totalItems: widget.items.length,
-        //                       storyViewIndicatorConfig:
-        //                           storyViewIndicatorConfig,
-        //                     ),
-        //                   )
-        //                 : StoryViewIndicator(
-        //                     currentIndex: currentIndex,
-        //                     currentItemAnimatedValue: currentItemProgress,
-        //                     totalItems: widget.items.length,
-        //                     storyViewIndicatorConfig: storyViewIndicatorConfig,
-        //                   ),
-        //       ],
-        //     ),
-        //   ),
-        // ),
+        Align(
+          alignment: storyViewIndicatorConfig.alignment,
+          child: Padding(
+            padding: storyViewIndicatorConfig.margin,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _currentVideoPlayer != null
+                    ? SmoothVideoProgress(
+                        controller: _currentVideoPlayer!,
+                        builder: (context, progress, duration, child) {
+                          return StoryViewIndicator(
+                            currentIndex: currentIndex,
+                            currentItemAnimatedValue: progress.inMilliseconds /
+                                duration.inMilliseconds,
+                            totalItems: widget.items.length,
+                            storyViewIndicatorConfig: storyViewIndicatorConfig,
+                          );
+                        })
+                    : _animationController != null
+                        ? AnimatedBuilder(
+                            animation: _animationController!,
+                            builder: (context, child) => StoryViewIndicator(
+                              currentIndex: currentIndex,
+                              currentItemAnimatedValue: currentItemProgress,
+                              totalItems: widget.items.length,
+                              storyViewIndicatorConfig:
+                                  storyViewIndicatorConfig,
+                            ),
+                          )
+                        : StoryViewIndicator(
+                            currentIndex: currentIndex,
+                            currentItemAnimatedValue: currentItemProgress,
+                            totalItems: widget.items.length,
+                            storyViewIndicatorConfig: storyViewIndicatorConfig,
+                          ),
+              ],
+            ),
+          ),
+        ),
         Align(
           alignment: Alignment.centerLeft,
           child: SizedBox(
