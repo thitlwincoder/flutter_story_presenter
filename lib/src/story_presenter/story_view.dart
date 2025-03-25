@@ -302,15 +302,15 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
       }
     }
 
-    if (event.betterPlayerEventType == BetterPlayerEventType.bufferingUpdate) {
-      _animationController?.stop(canceled: false);
-    }
+    // if (event.betterPlayerEventType == BetterPlayerEventType.bufferingUpdate) {
+    //   _animationController?.stop(canceled: false);
+    // }
 
-    if (event.betterPlayerEventType == BetterPlayerEventType.play) {
-      if (_currentProgressAnimation != null) {
-        _animationController?.forward(from: _currentProgressAnimation?.value);
-      }
-    }
+    // if (event.betterPlayerEventType == BetterPlayerEventType.play) {
+    //   if (_currentProgressAnimation != null) {
+    //     _animationController?.forward(from: _currentProgressAnimation?.value);
+    //   }
+    // }
 
     final dur = _currentVideoPlayer
         ?.videoPlayerController?.value.duration?.inMilliseconds;
@@ -322,16 +322,16 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
       return;
     }
 
-    // if (_currentVideoPlayer?.videoPlayerController?.value.isBuffering ??
-    //     false) {
-    //   _animationController?.stop(canceled: false);
-    // }
+    if (_currentVideoPlayer?.videoPlayerController?.value.isBuffering ??
+        false) {
+      _animationController?.stop(canceled: false);
+    }
 
-    // if (_currentVideoPlayer?.videoPlayerController?.value.isPlaying ?? false) {
-    //   if (_currentProgressAnimation != null) {
-    //     _animationController?.forward(from: _currentProgressAnimation?.value);
-    //   }
-    // }
+    if (_currentVideoPlayer?.videoPlayerController?.value.isPlaying ?? false) {
+      if (_currentProgressAnimation != null) {
+        _animationController?.forward(from: _currentProgressAnimation?.value);
+      }
+    }
   }
 
   void audioPositionListener(Duration position) {
