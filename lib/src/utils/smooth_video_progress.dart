@@ -34,16 +34,17 @@ class SmoothVideoProgress extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final value = useValueListenable(controller.videoPlayerController!);
-    final animationController = useAnimationController(
-        duration: value.duration, keys: [value.duration]);
+    var duration = value.duration ?? Duration.zero;
+
+    final animationController =
+        useAnimationController(duration: duration, keys: [value.duration]);
 
     final targetRelativePosition =
-        value.position.inMilliseconds / value.duration!.inMilliseconds;
+        value.position.inMilliseconds / duration.inMilliseconds;
 
     final currentPosition = Duration(
         milliseconds:
-            (animationController.value * value.duration!.inMilliseconds)
-                .round());
+            (animationController.value * duration.inMilliseconds).round());
 
     final offset = value.position - currentPosition;
 
@@ -56,9 +57,9 @@ class SmoothVideoProgress extends HookWidget {
         final correction = const Duration(milliseconds: 500) - offset;
         final targetPos =
             correct ? animationController.value : targetRelativePosition;
-        final duration = correct ? value.duration! + correction : value.duration;
 
-        animationController.duration = duration;
+        animationController.duration =
+            correct ? duration + correction : duration;
         value.isPlaying
             ? animationController.forward(from: targetPos)
             : animationController.value = targetRelativePosition;
@@ -76,12 +77,11 @@ class SmoothVideoProgress extends HookWidget {
     return AnimatedBuilder(
       animation: animationController,
       builder: (context, child) {
-        final millis =
-            animationController.value * value.duration!.inMilliseconds;
+        final millis = animationController.value * duration.inMilliseconds;
         return builder(
           context,
           Duration(milliseconds: millis.round()),
-          value.duration!,
+          duration,
           child,
         );
       },
