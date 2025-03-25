@@ -358,6 +358,8 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
 
   /// Plays the next story item.
   void _playNext() async {
+    if (!mounted) return;
+
     if (widget.items.length == 1 &&
         _currentVideoPlayer != null &&
         widget.restartOnCompleted) {
@@ -376,8 +378,6 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
     }
 
     if (currentIndex == widget.items.length - 1) {
-      if (!mounted) return;
-      
       await widget.onCompleted?.call();
       if (widget.restartOnCompleted) {
         currentIndex = 0;
@@ -433,7 +433,7 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final size = MediaQuery.sizeOf(context);
     return Stack(
       fit: StackFit.expand,
       children: [
