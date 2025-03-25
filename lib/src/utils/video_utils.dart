@@ -1,13 +1,8 @@
 import 'dart:io';
 import 'package:better_player_plus/better_player_plus.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class VideoUtils {
   VideoUtils._();
-
-  // Cache manager to handle caching of video files.
-  final _cacheManager = DefaultCacheManager();
 
   // Singleton instance of VideoUtils.
   static final VideoUtils instance = VideoUtils._();
