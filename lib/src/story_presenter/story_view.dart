@@ -5,7 +5,6 @@ import 'package:better_player_plus/better_player_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_story_presenter/src/story_presenter/story_custom_view_wrapper.dart';
 import 'package:just_audio/just_audio.dart';
-import '../story_presenter/story_view_indicator.dart';
 import '../models/story_item.dart';
 import '../models/story_view_indicator_config.dart';
 import '../controller/flutter_story_controller.dart';
@@ -13,7 +12,6 @@ import '../story_presenter/image_story_view.dart';
 import '../story_presenter/video_story_view.dart';
 import '../story_presenter/web_story_view.dart';
 import '../story_presenter/text_story_view.dart';
-import '../utils/smooth_video_progress.dart';
 import '../utils/story_utils.dart';
 
 typedef OnStoryChanged = void Function(int);
@@ -293,6 +291,15 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
 
   /// Listener for the video player's state changes.
   void videoListener(BetterPlayerEvent event) {
+    if (event.betterPlayerEventType == BetterPlayerEventType.initialized) {
+      if (_currentVideoPlayer?.videoPlayerController != null) {
+        _currentVideoPlayer?.setOverriddenAspectRatio(
+          _currentVideoPlayer!.videoPlayerController!.value.aspectRatio,
+        );
+        setState(() {});
+      }
+    }
+
     final dur = _currentVideoPlayer
         ?.videoPlayerController?.value.duration?.inMilliseconds;
     final pos = _currentVideoPlayer

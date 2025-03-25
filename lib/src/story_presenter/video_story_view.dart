@@ -28,7 +28,7 @@ class VideoStoryView extends StatefulWidget {
 }
 
 class _VideoStoryViewState extends State<VideoStoryView> {
-  BetterPlayerController? controller;
+  late BetterPlayerController controller;
   bool hasError = false;
 
   @override
@@ -56,8 +56,8 @@ class _VideoStoryViewState extends State<VideoStoryView> {
         );
       }
       // await videoPlayerController?.initialize();
-      widget.onVideoLoad?.call(controller!);
-      controller!.addEventsListener(eventListener);
+      widget.onVideoLoad?.call(controller);
+      // controller.addEventsListener(eventListener);
       // await controller?.setLooping(widget.looping ?? false);
       // await controller?.setVolume(storyItem.isMuteByDefault ? 0 : 1);
       // if (controller?.videoPlayerController != null) {
@@ -74,7 +74,7 @@ class _VideoStoryViewState extends State<VideoStoryView> {
   @override
   void dispose() {
     // controller?.removeEventsListener(eventListener);
-    controller?.dispose();
+    controller.dispose();
     super.dispose();
   }
 
@@ -94,9 +94,9 @@ class _VideoStoryViewState extends State<VideoStoryView> {
           // Display the error widget if an error occurred.
           widget.storyItem.errorWidget!,
         },
-        if (controller != null) ...{
+        ...{
           Positioned.fill(
-            child: BetterPlayer(controller: controller!),
+            child: BetterPlayer(controller: controller),
           ),
           // if (widget.storyItem.videoConfig?.useVideoAspectRatio ?? false) ...{
           //   // Display the video with aspect ratio if specified.
@@ -120,15 +120,15 @@ class _VideoStoryViewState extends State<VideoStoryView> {
     );
   }
 
-  void eventListener(BetterPlayerEvent event) {
-    if (event.betterPlayerEventType == BetterPlayerEventType.initialized) {
-      if (controller?.videoPlayerController != null) {
-        controller?.setOverriddenAspectRatio(
-          controller!.videoPlayerController!.value.aspectRatio,
-        );
-      }
-    }
+  // void eventListener(BetterPlayerEvent event) {
+  //   if (event.betterPlayerEventType == BetterPlayerEventType.initialized) {
+  //     if (controller.videoPlayerController != null) {
+  //       controller.setOverriddenAspectRatio(
+  //         controller.videoPlayerController!.value.aspectRatio,
+  //       );
+  //     }
+  //   }
 
-    setState(() {});
-  }
+  //   setState(() {});
+  // }
 }
