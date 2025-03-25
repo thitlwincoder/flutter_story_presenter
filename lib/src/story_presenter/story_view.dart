@@ -376,6 +376,8 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
     }
 
     if (currentIndex == widget.items.length - 1) {
+      if (!mounted) return;
+      
       await widget.onCompleted?.call();
       if (widget.restartOnCompleted) {
         currentIndex = 0;
