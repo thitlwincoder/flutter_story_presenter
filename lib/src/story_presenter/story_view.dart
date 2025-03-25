@@ -298,7 +298,6 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
         _currentVideoPlayer?.setOverriddenAspectRatio(
           _currentVideoPlayer!.videoPlayerController!.value.aspectRatio,
         );
-        setState(() {});
       }
     }
 
@@ -332,6 +331,8 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
         _animationController?.forward(from: _currentProgressAnimation?.value);
       }
     }
+
+    setState(() {});
   }
 
   void audioPositionListener(Duration position) {
