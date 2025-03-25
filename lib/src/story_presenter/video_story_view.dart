@@ -57,7 +57,7 @@ class _VideoStoryViewState extends State<VideoStoryView> {
       }
       // await videoPlayerController?.initialize();
       widget.onVideoLoad?.call(controller!);
-      await controller?.play();
+      controller!.addEventsListener(eventListener);
       // await controller?.setLooping(widget.looping ?? false);
       // await controller?.setVolume(storyItem.isMuteByDefault ? 0 : 1);
       // if (controller?.videoPlayerController != null) {
@@ -72,32 +72,15 @@ class _VideoStoryViewState extends State<VideoStoryView> {
     setState(() {});
   }
 
-  BoxFit get fit => widget.storyItem.videoConfig?.fit ?? BoxFit.cover;
-
   @override
   void dispose() {
+    controller?.removeEventsListener(eventListener);
     controller?.dispose();
     super.dispose();
   }
 
-  // @override
-  // void didUpdateWidget(covariant VideoStoryView oldWidget) {
-  //   super.didUpdateWidget(oldWidget);
-  //   if (controller?.videoPlayerController != null) {
-  //     controller?.setOverriddenAspectRatio(
-  //       controller!.videoPlayerController!.value.aspectRatio,
-  //     );
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
-    if (controller?.videoPlayerController != null) {
-      controller?.setOverriddenAspectRatio(
-        controller!.videoPlayerController!.value.aspectRatio,
-      );
-    }
-
     return Stack(
       fit: StackFit.expand,
       alignment: Alignment.center,
@@ -114,15 +97,8 @@ class _VideoStoryViewState extends State<VideoStoryView> {
         },
         if (controller != null) ...{
           Positioned.fill(
-            child: BetterPlayer(
-              controller: controller!,
-            ),
+            child: BetterPlayer(controller: controller!),
           ),
-          Center(
-            child: Text(
-              '${controller?.videoPlayerController?.value.aspectRatio ?? 0}',
-            ),
-          )
           // if (widget.storyItem.videoConfig?.useVideoAspectRatio ?? false) ...{
           //   // Display the video with aspect ratio if specified.
 
@@ -143,5 +119,17 @@ class _VideoStoryViewState extends State<VideoStoryView> {
         },
       ],
     );
+  }
+
+  void eventListener(BetterPlayerEvent event) {
+    if (event.betterPlayerEventType == BetterPlayerEventType.initialized) {
+      if (controller?.videoPlayerController != null) {
+        controller?.setOverriddenAspectRatio(
+          controller!.videoPlayerController!.value.aspectRatio,
+        );
+      }
+    }
+
+    setState(() {});
   }
 }
