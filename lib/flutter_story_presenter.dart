@@ -14,3 +14,5 @@ export 'src/story_presenter/text_story_view.dart';
 export 'src/story_presenter/video_story_view.dart';
 export 'src/story_presenter/web_story_view.dart';
 export 'src/utils/story_utils.dart';
+export 'package:better_player_plus/better_player_plus.dart'
+    show BetterPlayerConfiguration;

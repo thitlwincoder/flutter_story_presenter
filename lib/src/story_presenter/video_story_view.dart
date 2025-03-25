@@ -1,7 +1,7 @@
 import 'dart:io';
 
+import 'package:better_player_plus/better_player_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
 import '../models/story_item.dart';
 import '../story_presenter/story_view.dart';
 import '../utils/story_utils.dart';
@@ -28,7 +28,7 @@ class VideoStoryView extends StatefulWidget {
 }
 
 class _VideoStoryViewState extends State<VideoStoryView> {
-  VideoPlayerController? videoPlayerController;
+  BetterPlayerController? controller;
   bool hasError = false;
 
   @override
@@ -43,30 +43,28 @@ class _VideoStoryViewState extends State<VideoStoryView> {
       final storyItem = widget.storyItem;
       if (storyItem.storyItemSource.isNetwork) {
         // Initialize video controller for network source.
-        videoPlayerController =
-            await VideoUtils.instance.videoControllerFromUrl(
+        controller = await VideoUtils.instance.videoControllerFromUrl(
           url: storyItem.url!,
           cacheFile: storyItem.videoConfig?.cacheVideo,
-          videoPlayerOptions: storyItem.videoConfig?.videoPlayerOptions,
-        );
-      } else if (storyItem.storyItemSource.isFile) {
-        // Initialize video controller for file source.
-        videoPlayerController = VideoUtils.instance.videoControllerFromFile(
-          file: File(storyItem.url!),
-          videoPlayerOptions: storyItem.videoConfig?.videoPlayerOptions,
+          configuration: storyItem.videoConfig!.configuration,
         );
       } else {
-        // Initialize video controller for asset source.
-        videoPlayerController = VideoUtils.instance.videoControllerFromAsset(
-          assetPath: storyItem.url!,
-          videoPlayerOptions: storyItem.videoConfig?.videoPlayerOptions,
+        // Initialize video controller for file source.
+        controller = VideoUtils.instance.videoControllerFromFile(
+          file: File(storyItem.url!),
+          configuration: storyItem.videoConfig!.configuration,
         );
       }
-      await videoPlayerController?.initialize();
-      widget.onVideoLoad?.call(videoPlayerController!);
-      await videoPlayerController?.play();
-      await videoPlayerController?.setLooping(widget.looping ?? false);
-      await videoPlayerController?.setVolume(storyItem.isMuteByDefault ? 0 : 1);
+      // await videoPlayerController?.initialize();
+      widget.onVideoLoad?.call(controller!);
+      await controller?.play();
+      await controller?.setLooping(widget.looping ?? false);
+      await controller?.setVolume(storyItem.isMuteByDefault ? 0 : 1);
+      if (controller?.videoPlayerController != null) {
+        controller?.setOverriddenAspectRatio(
+          controller!.videoPlayerController!.value.aspectRatio,
+        );
+      }
     } catch (e) {
       hasError = true;
       debugPrint('$e');
@@ -78,7 +76,7 @@ class _VideoStoryViewState extends State<VideoStoryView> {
 
   @override
   void dispose() {
-    videoPlayerController?.dispose();
+    controller?.dispose();
     super.dispose();
   }
 
@@ -98,29 +96,27 @@ class _VideoStoryViewState extends State<VideoStoryView> {
           // Display the error widget if an error occurred.
           widget.storyItem.errorWidget!,
         },
-        if (videoPlayerController != null) ...{
-          if (widget.storyItem.videoConfig?.useVideoAspectRatio ?? false) ...{
-            // Display the video with aspect ratio if specified.
-            AspectRatio(
-              aspectRatio: videoPlayerController!.value.aspectRatio,
-              child: VideoPlayer(
-                videoPlayerController!,
-              ),
-            )
-          } else ...{
-            // Display the video fitted to the screen.
-            FittedBox(
-              fit: BoxFit.cover,
-              alignment: Alignment.center,
-              child: SizedBox(
-                width: widget.storyItem.videoConfig?.width ??
-                    videoPlayerController!.value.size.width,
-                height: widget.storyItem.videoConfig?.height ??
-                    videoPlayerController!.value.size.height,
-                child: VideoPlayer(videoPlayerController!),
-              ),
-            )
-          },
+        if (controller != null) ...{
+          BetterPlayer(
+            controller: controller!,
+          )
+          // if (widget.storyItem.videoConfig?.useVideoAspectRatio ?? false) ...{
+          //   // Display the video with aspect ratio if specified.
+
+          // } else ...{
+          //   // Display the video fitted to the screen.
+          //   FittedBox(
+          //     fit: BoxFit.cover,
+          //     alignment: Alignment.center,
+          //     child: SizedBox(
+          //       width: widget.storyItem.videoConfig?.width ??
+          //           videoPlayerController!.value.size.width,
+          //       height: widget.storyItem.videoConfig?.height ??
+          //           videoPlayerController!.value.size.height,
+          //       child: VideoPlayer(videoPlayerController!),
+          //     ),
+          //   )
+          // },
         },
       ],
     );

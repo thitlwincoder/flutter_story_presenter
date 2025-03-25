@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:better_player_plus/better_player_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_story_presenter/src/story_presenter/story_custom_view_wrapper.dart';
 import 'package:just_audio/just_audio.dart';
@@ -14,7 +15,6 @@ import '../story_presenter/web_story_view.dart';
 import '../story_presenter/text_story_view.dart';
 import '../utils/smooth_video_progress.dart';
 import '../utils/story_utils.dart';
-import 'package:video_player/video_player.dart';
 
 typedef OnStoryChanged = void Function(int);
 typedef OnCompleted = Future<void> Function();
@@ -22,7 +22,7 @@ typedef OnLeftTap = void Function();
 typedef OnRightTap = void Function();
 typedef OnDrag = void Function();
 typedef OnItemBuild = Widget? Function(int, Widget);
-typedef OnVideoLoad = void Function(VideoPlayerController?);
+typedef OnVideoLoad = void Function(BetterPlayerController?);
 typedef OnAudioLoaded = void Function(AudioPlayer);
 typedef CustomViewBuilder = Widget Function(AudioPlayer);
 typedef OnSlideDown = void Function(DragUpdateDetails);
@@ -104,7 +104,7 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
   int currentIndex = 0;
   bool isCurrentItemLoaded = false;
   double currentItemProgress = 0;
-  VideoPlayerController? _currentVideoPlayer;
+  BetterPlayerController? _currentVideoPlayer;
   double? storyViewHeight;
   AudioPlayer? _audioPlayer;
   Duration? _totalAudioDuration;
@@ -232,7 +232,7 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
 
   /// Starts the countdown for the story item duration.
   void _startStoryCountdown() {
-    _currentVideoPlayer?.addListener(videoListener);
+    _currentVideoPlayer?.addEventsListener(videoListener);
     if (_currentVideoPlayer != null) {
       return;
     }
@@ -280,7 +280,8 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
     );
 
     _animationController?.duration =
-        _currentVideoPlayer?.value.duration ?? currentItem.duration;
+        _currentVideoPlayer?.videoPlayerController?.value.duration ??
+            currentItem.duration;
 
     _currentProgressAnimation =
         Tween<double>(begin: 0, end: 1).animate(_animationController!)
@@ -291,20 +292,22 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
   }
 
   /// Listener for the video player's state changes.
-  void videoListener() {
-    final dur = _currentVideoPlayer?.value.duration.inMilliseconds;
-    final pos = _currentVideoPlayer?.value.position.inMilliseconds;
+  void videoListener(BetterPlayerEvent event) {
+    final dur = _currentVideoPlayer
+        ?.videoPlayerController?.value.duration?.inMilliseconds;
+    final pos = _currentVideoPlayer
+        ?.videoPlayerController?.value.position.inMilliseconds;
 
     if (pos == dur) {
       _playNext();
       return;
     }
 
-    if (_currentVideoPlayer?.value.isBuffering ?? false) {
+    if (_currentVideoPlayer?.isBuffering() ?? false) {
       _animationController?.stop(canceled: false);
     }
 
-    if (_currentVideoPlayer?.value.isPlaying ?? false) {
+    if (_currentVideoPlayer?.isPlaying() ?? false) {
       if (_currentProgressAnimation != null) {
         _animationController?.forward(from: _currentProgressAnimation?.value);
       }
@@ -343,7 +346,8 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
   /// Toggles mute/unmute for the media.
   void _toggleMuteUnMuteMedia() {
     if (_currentVideoPlayer != null) {
-      final videoPlayerValue = _currentVideoPlayer!.value;
+      final videoPlayerValue =
+          _currentVideoPlayer!.videoPlayerController!.value;
       if (videoPlayerValue.volume == 1) {
         _currentVideoPlayer!.setVolume(0);
       } else {
@@ -366,7 +370,7 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
     if (_currentVideoPlayer != null &&
         currentIndex != (widget.items.length - 1)) {
       /// Dispose the video player only in case of multiple story
-      _currentVideoPlayer?.removeListener(videoListener);
+      _currentVideoPlayer?.removeEventsListener(videoListener);
       _currentVideoPlayer?.dispose();
       _currentVideoPlayer = null;
     }
@@ -411,7 +415,7 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
       _audioPlayerStateStream?.cancel();
     }
     if (_currentVideoPlayer != null) {
-      _currentVideoPlayer?.removeListener(videoListener);
+      _currentVideoPlayer?.removeEventsListener(videoListener);
       _currentVideoPlayer?.dispose();
       _currentVideoPlayer = null;
     }

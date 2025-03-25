@@ -1,6 +1,6 @@
+import 'package:better_player_plus/better_player_plus.dart';
 import 'package:flutter/material.dart';
 import '../utils/story_utils.dart';
-import 'package:video_player/video_player.dart';
 
 class StoryViewVideoConfig {
   const StoryViewVideoConfig({
@@ -10,7 +10,7 @@ class StoryViewVideoConfig {
     this.loadingWidget,
     this.cacheVideo = false,
     this.useVideoAspectRatio = true,
-    this.videoPlayerOptions,
+    required this.configuration,
   });
 
   /// Height for the Video
@@ -33,5 +33,5 @@ class StoryViewVideoConfig {
   final Widget? loadingWidget;
 
   /// In case of mixing the audio with music playing on device
-  final VideoPlayerOptions? videoPlayerOptions;
+  final BetterPlayerConfiguration configuration;
 }

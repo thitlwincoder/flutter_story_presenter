@@ -1,7 +1,7 @@
 import 'dart:io';
+import 'package:better_player_plus/better_player_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:video_player/video_player.dart';
 
 class VideoUtils {
   VideoUtils._();
@@ -14,10 +14,10 @@ class VideoUtils {
 
   // Method to create a VideoPlayerController from a URL.
   // If cacheFile is true, it attempts to cache the video file.
-  Future<VideoPlayerController> videoControllerFromUrl({
+  Future<BetterPlayerController> videoControllerFromUrl({
     required String url,
     bool? cacheFile = false,
-    VideoPlayerOptions? videoPlayerOptions,
+    required BetterPlayerConfiguration configuration,
   }) async {
     try {
       File? cachedVideo;
@@ -27,40 +27,39 @@ class VideoUtils {
       }
       // If a cached video file is found, create a VideoPlayerController from it.
       if (cachedVideo != null) {
-        return VideoPlayerController.file(
-          cachedVideo,
-          videoPlayerOptions: videoPlayerOptions,
+        return BetterPlayerController(
+          configuration,
+          betterPlayerDataSource: BetterPlayerDataSource.file(cachedVideo.path),
         );
       }
     } catch (e) {
       debugPrint(e.toString());
     }
     // If no cached file is found, create a VideoPlayerController from the network URL.
-    return VideoPlayerController.networkUrl(
-      Uri.parse(url),
-      videoPlayerOptions: videoPlayerOptions,
+    return BetterPlayerController(
+      configuration,
+      betterPlayerDataSource: BetterPlayerDataSource.network(
+        url,
+        cacheConfiguration:
+            const BetterPlayerCacheConfiguration(useCache: true),
+        bufferingConfiguration: const BetterPlayerBufferingConfiguration(
+          minBufferMs: 15000, // Reduce min buffer size
+          maxBufferMs: 50000, // Reduce max buffer size
+          bufferForPlaybackMs: 2500,
+          bufferForPlaybackAfterRebufferMs: 5000,
+        ),
+      ),
     );
   }
 
   // Method to create a VideoPlayerController from a local file.
-  VideoPlayerController videoControllerFromFile({
+  BetterPlayerController videoControllerFromFile({
     required File file,
-    VideoPlayerOptions? videoPlayerOptions,
+    required BetterPlayerConfiguration configuration,
   }) {
-    return VideoPlayerController.file(
-      file,
-      videoPlayerOptions: videoPlayerOptions,
-    );
-  }
-
-  // Method to create a VideoPlayerController from an asset file.
-  VideoPlayerController videoControllerFromAsset({
-    required String assetPath,
-    VideoPlayerOptions? videoPlayerOptions,
-  }) {
-    return VideoPlayerController.asset(
-      assetPath,
-      videoPlayerOptions: videoPlayerOptions,
+    return BetterPlayerController(
+      configuration,
+      betterPlayerDataSource: BetterPlayerDataSource.file(file.path),
     );
   }
 }

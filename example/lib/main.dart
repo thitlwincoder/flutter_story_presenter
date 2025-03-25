@@ -53,6 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
             videoConfig: StoryViewVideoConfig(
               cacheVideo: true,
               useVideoAspectRatio: false,
+              configuration: BetterPlayerConfiguration(),
             ),
           ),
         ],
