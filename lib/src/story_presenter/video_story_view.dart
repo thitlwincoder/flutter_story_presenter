@@ -28,7 +28,7 @@ class VideoStoryView extends StatefulWidget {
 }
 
 class _VideoStoryViewState extends State<VideoStoryView> {
-  late BetterPlayerController controller;
+  BetterPlayerController? controller;
   bool hasError = false;
 
   @override
@@ -73,8 +73,7 @@ class _VideoStoryViewState extends State<VideoStoryView> {
 
   @override
   void dispose() {
-    // controller?.removeEventsListener(eventListener);
-    controller.dispose();
+    controller?.dispose();
     super.dispose();
   }
 
@@ -94,9 +93,9 @@ class _VideoStoryViewState extends State<VideoStoryView> {
           // Display the error widget if an error occurred.
           widget.storyItem.errorWidget!,
         },
-        ...{
+        if (controller != null) ...{
           Positioned.fill(
-            child: BetterPlayer(controller: controller),
+            child: BetterPlayer(controller: controller!),
           ),
           // if (widget.storyItem.videoConfig?.useVideoAspectRatio ?? false) ...{
           //   // Display the video with aspect ratio if specified.
