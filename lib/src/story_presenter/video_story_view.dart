@@ -80,18 +80,24 @@ class _VideoStoryViewState extends State<VideoStoryView> {
     super.dispose();
   }
 
+  // @override
+  // void didUpdateWidget(covariant VideoStoryView oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //   if (controller?.videoPlayerController != null) {
+  //     controller?.setOverriddenAspectRatio(
+  //       controller!.videoPlayerController!.value.aspectRatio,
+  //     );
+  //   }
+  // }
+
   @override
-  void didUpdateWidget(covariant VideoStoryView oldWidget) {
-    super.didUpdateWidget(oldWidget);
+  Widget build(BuildContext context) {
     if (controller?.videoPlayerController != null) {
       controller?.setOverriddenAspectRatio(
         controller!.videoPlayerController!.value.aspectRatio,
       );
     }
-  }
 
-  @override
-  Widget build(BuildContext context) {
     return Stack(
       fit: StackFit.expand,
       alignment: Alignment.center,
@@ -107,8 +113,10 @@ class _VideoStoryViewState extends State<VideoStoryView> {
           widget.storyItem.errorWidget!,
         },
         if (controller != null) ...{
-          BetterPlayer(
-            controller: controller!,
+          Positioned.fill(
+            child: BetterPlayer(
+              controller: controller!,
+            ),
           )
           // if (widget.storyItem.videoConfig?.useVideoAspectRatio ?? false) ...{
           //   // Display the video with aspect ratio if specified.
