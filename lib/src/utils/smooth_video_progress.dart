@@ -36,15 +36,18 @@ class SmoothVideoProgress extends HookWidget {
     final value = useValueListenable(controller.videoPlayerController!);
     var duration = value.duration ?? Duration.zero;
 
-    final animationController =
-        useAnimationController(duration: duration, keys: [value.duration]);
+    final animationController = useAnimationController(
+      duration: duration,
+      keys: [value.duration ?? Duration.zero],
+    );
 
     final targetRelativePosition =
         value.position.inMilliseconds / duration.inMilliseconds;
 
     final currentPosition = Duration(
-        milliseconds:
-            (animationController.value * duration.inMilliseconds).round());
+      milliseconds:
+          (animationController.value * duration.inMilliseconds).round(),
+    );
 
     final offset = value.position - currentPosition;
 
