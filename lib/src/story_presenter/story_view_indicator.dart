@@ -40,7 +40,12 @@ class StoryViewIndicator extends StatelessWidget {
                       Radius.circular(storyViewIndicatorConfig.borderRadius)),
                   child: LinearProgressIndicator(
                     minHeight: storyViewIndicatorConfig.height,
-                    value: i == currentIndex ? currentItemAnimatedValue : 0,
+                    value: i == currentIndex
+                        ? currentItemAnimatedValue.isNaN ||
+                                currentItemAnimatedValue.isNegative
+                            ? 0
+                            : currentItemAnimatedValue
+                        : 0,
                     valueColor: AlwaysStoppedAnimation<Color>(
                         storyViewIndicatorConfig.activeColor),
                     backgroundColor: i < currentIndex
