@@ -394,7 +394,7 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
     }
 
     if (currentIndex == widget.items.length - 1) {
-      await widget.onCompleted?.call();
+      if (mounted) await widget.onCompleted?.call();
       if (widget.restartOnCompleted) {
         currentIndex = 0;
         _resetAnimation();
