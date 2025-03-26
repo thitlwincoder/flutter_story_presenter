@@ -232,7 +232,7 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
 
   /// Starts the countdown for the story item duration.
   void _startStoryCountdown() {
-    _currentVideoPlayer?.addEventsListener(videoListener);
+    // _currentVideoPlayer?.addEventsListener(videoListener);
     if (_currentVideoPlayer != null) {
       return;
     }
@@ -507,6 +507,7 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
               onVideoLoad: (videoPlayer) {
                 isCurrentItemLoaded = true;
                 _currentVideoPlayer = videoPlayer;
+                _currentVideoPlayer?.addEventsListener(videoListener);
                 widget.onVideoLoad?.call(videoPlayer);
                 _startStoryCountdown();
                 if (mounted) {
