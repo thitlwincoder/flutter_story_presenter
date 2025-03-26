@@ -232,7 +232,7 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
 
   /// Starts the countdown for the story item duration.
   void _startStoryCountdown() {
-    // _currentVideoPlayer?.addEventsListener(videoListener);
+    _currentVideoPlayer?.videoPlayerController?.addListener(videoListener);
     if (_currentVideoPlayer != null) {
       return;
     }
@@ -292,15 +292,12 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
   }
 
   /// Listener for the video player's state changes.
-  void videoListener(BetterPlayerEvent event) {
-    if (event.betterPlayerEventType == BetterPlayerEventType.initialized) {
-      if (_currentVideoPlayer?.videoPlayerController != null) {
-        _currentVideoPlayer?.setOverriddenAspectRatio(
-          _currentVideoPlayer!.videoPlayerController!.value.aspectRatio,
-        );
-      }
+  void videoListener() {
+    if (_currentVideoPlayer?.videoPlayerController != null) {
+      _currentVideoPlayer?.setOverriddenAspectRatio(
+        _currentVideoPlayer!.videoPlayerController!.value.aspectRatio,
+      );
     }
-
     // if (event.betterPlayerEventType == BetterPlayerEventType.bufferingUpdate) {
     //   _animationController?.stop(canceled: false);
     // }
@@ -391,7 +388,7 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
     if (_currentVideoPlayer != null &&
         currentIndex != (widget.items.length - 1)) {
       /// Dispose the video player only in case of multiple story
-      _currentVideoPlayer?.removeEventsListener(videoListener);
+      _currentVideoPlayer?.videoPlayerController?.removeListener(videoListener);
       _currentVideoPlayer?.dispose();
       _currentVideoPlayer = null;
     }
@@ -436,7 +433,7 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
       _audioPlayerStateStream?.cancel();
     }
     if (_currentVideoPlayer != null) {
-      _currentVideoPlayer?.removeEventsListener(videoListener);
+      _currentVideoPlayer?.videoPlayerController?.removeListener(videoListener);
       _currentVideoPlayer?.dispose();
       _currentVideoPlayer = null;
     }
@@ -507,7 +504,6 @@ class _FlutterStoryPresenterState extends State<FlutterStoryPresenter>
               onVideoLoad: (videoPlayer) {
                 isCurrentItemLoaded = true;
                 _currentVideoPlayer = videoPlayer;
-                _currentVideoPlayer?.addEventsListener(videoListener);
                 widget.onVideoLoad?.call(videoPlayer);
                 _startStoryCountdown();
                 if (mounted) {
